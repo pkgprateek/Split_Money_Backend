@@ -25,5 +25,5 @@ Route::post('/addtransaction','TransactionController@create');
 
 Route::post('/index','TransactionController@index');
 
-Route::post('/show','UserController@showfriends');
+Route::get('/show','UserController@showfriends');
 
