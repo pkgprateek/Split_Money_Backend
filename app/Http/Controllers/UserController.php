@@ -83,7 +83,7 @@ class UserController extends Controller
 
     public function edit(Request $request)
     {
-        $sql = \DB::table('friends')->where('friendemail', $request->user_id2)->get();
+        $sql = \DB::table('friends')->where('friendemail', $request->user_id2)->first();
         $sql = json_decode($sql);
 
         if(!$sql)
