@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Route::post('/register','UserController@register');
 
+Route::post('/login','UserController@login');
+
 Route::post('/friend','UserController@add_friend');
 
 Route::post('/transaction','TransactionController@show');
