@@ -90,7 +90,7 @@ class UserController extends Controller
         {
             $friend = \DB::table('friends')->update([
                     'useremail'         => $request->user_id1,
-                    'friendemail'       => $request->user_id2,
+                    'friendemail'       => $request->new_email,
                     ]);
         
             return response()->json(['name'=>'null', 'info'=>'Incorrect Credentials']); 
