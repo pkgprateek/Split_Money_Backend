@@ -83,13 +83,12 @@ class UserController extends Controller
 
     public function edit(Request $request)
     {
-        $sql = \DB::table('friends')->where('friendemail', $request->user_id2)->first();
+        $sql = \DB::table('friends')->where('friendemail', $request->user_id2)->get();
         $sql = json_decode($sql);
 
         if(!$sql)
         {
-            $friend = \DB::table('friends')->update([
-                    'useremail'         => $request->user_id1,
+            $friend = \DB::table('friends')->where('friendemail', $request->user_id2)->where('friendemail', $request->user_id2)->update([
                     'friendemail'       => $request->new_email,
                     ]);
         
