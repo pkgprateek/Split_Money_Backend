@@ -81,4 +81,22 @@ class UserController extends Controller
         return response()->json($sql);
     }
 
+    public function edit(Request $request)
+    {
+        $sql = \DB::table('friends')->where('friendemail', $request->user_id2)->first();
+        $sql = json_decode($sql);
+
+        if(!$sql)
+        {
+            $friend = \DB::table('friends')->update([
+                    'useremail'         => $request->user_id1,
+                    'friendemail'       => $request->user_id2,
+                    ]);
+        
+            return response()->json(['name'=>'null', 'info'=>'Incorrect Credentials']); 
+        }
+
+        return response("Friend not present.");
+    }
+
 }

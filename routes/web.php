@@ -29,3 +29,4 @@ Route::post('/index','TransactionController@index');
 
 Route::post('/show','UserController@showfriends');
 
+Route::post('/edit', "UserController@edit")
