@@ -5,42 +5,69 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Transaction;
+use Auth;
 
 class UserController extends Controller
 {
     public function register(Request $request)
     {
+        $sql = User::where('email', $request['email'])->get();
+        $sql = json_decode($sql);
+
+        if(!$sql)
+        {
+            $user = \DB::table('users')->insert([
+                    'name'              => $request->name,
+                    'email'             => $request->email,
+                    'password'          => bcrypt($request->password),
+                    'contact_no'        => $request->email."".$request->name,
+                    ]);
+                return response()->json("registered");       
+        }
+        else
+        {
+                return response()->json("User already exists. Please Login!!!!");       
+        }
+        
+    }
+
+    public function login(Request $request)
+    {
     	
-    	$sql = User::where('email', $request['email'])->get();
+    	$sql = User::where('email', $request['email'])->get()->first();
     	$sql = json_decode($sql);
-    	
+
     	if(!$sql)
     	{
-	    	$user = \DB::table('users')->insert([
-	    			'f_id'        		=> $request->f_id,
-	                'name'       		=> $request->name,
-	                'email'       		=> $request->email,
-	                'contact_no'  		=> $request->f_id."".$request->name,
-	                ]);
-	           
+            return response()->json(['name'=>'null', 'info'=>"User not registered"]);
 	    }
-     	return response()->json("Welcome to SplitMoney");
+        else{
+                if (Auth::attempt(['email'=>$request->email,'password'=>$request->password]))
+                {
+                    return response()->json(['name'=>$sql->name, 'info'=>'Fuck Yeah']);
+                }
 
+                else
+                    return response()->json(['name'=>'null', 'info'=>'Incorrect Credentials']);
+            }
+     	
     }
 
     public function add_friend(Request $request)
     {
-    	$sql = \DB::table('friends')->where('contact_no', $request->contact_no)->get();
+    	$sql = \DB::table('friends')->where('friendemail', $request->user_id2)->get();
     	$sql = json_decode($sql);
 
     	if(!$sql)
     	{
     		$friend = \DB::table('friends')->insert([
-	                'contact_no'  		=> $request->contact_no,
-	                'name'       		=> $request->name,
+                    'useremail'         => $request->user_id1,
+                    'username'          => $request->u_name,
+	                'friendemail'  		=> $request->user_id2,
+	                'friend_name'       => $request->f_name,
 	                ]);
     	
-    		return response()->json(['contact_no' => $request->contact_no, 'name' => $request->name]);	
+    		return response()->json("Friend Added");	
     	}
     	
     	return response("Friend Already Added");
@@ -48,7 +75,7 @@ class UserController extends Controller
 
     public function showfriends(Request $request)
     {
-        $sql = \DB::table('friends')->where('useremail', $request->useremail)->get(array('friend_name', 'friendemail'));
+        $sql = \DB::table('friends')->where('useremail', $request->useremail)->get(array('friend_name'));
         $sql = json_decode($sql);
 
         return response()->json($sql);

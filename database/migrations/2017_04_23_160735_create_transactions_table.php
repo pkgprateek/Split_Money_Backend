@@ -18,11 +18,11 @@ class CreateTransactionsTable extends Migration
             $table->string('expenditure');
             $table->string('user_id1');
             $table->string('user_id2');
-            $table->integer('user_pay1');
-            $table->integer('user_pay2');
+            $table->double('user_pay1');
+            $table->double('user_pay2');
             $table->integer('option');
-            $table->integer('credit1');
-            $table->integer('credit2');
+            $table->double('credit1');
+            $table->double('credit2');
             $table->timestamps();
         });
     }
